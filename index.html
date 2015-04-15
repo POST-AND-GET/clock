@@ -26,10 +26,11 @@
 	var ctx = document.getElementById('cvs').getContext('2d');
 	function clock(){
 		var now = new Date();
+
 		var hour = now.getHours(),
 			minute = now.getMinutes(),
 			second = now.getSeconds();
-		hour = hour>12?hour-12:hour;
+		hour = hour>=12?hour-12:hour;
 		ctx.save();
 		ctx.clearRect(0,0,600,600);
 		ctx.translate(300,300);
@@ -42,8 +43,8 @@
 		drawGra(12,210,0,220,0);
 		drawGra(60,217,0,220,0);
 		drawPoin(hour,minute,second,5,0,0,150,0,"#ff0000");//时针
-		drawPoin(0,minute,second,3,0,0,175,0,"#1ca112");//分针
-		drawPoin(0,0,second,1,0,0,190,0,"#ff6b08");//画秒针
+		drawPoin(null,minute,second,3,0,0,175,0,"#1ca112");//分针
+		drawPoin(null,null,second,1,0,0,190,0,"#ff6b08");//画秒针
 		ctx.lineWidth=2;
 		ctx.strokeStyle="#fc4e19";
 		ctx.fillStyle="#fc4e19";
@@ -66,9 +67,9 @@
 	}
 	function drawPoin(hour,minute,second,lw,goX,goY,toX,toY,color){
 		var deg = (Math.PI/6)*hour+(Math.PI/360)*minute+(Math.PI/21600)*second;
-		if (hour==0) {
+		if (hour==null) {
 			deg = (Math.PI/30)*minute+(Math.PI/1800)*second;
-			if (minute==0) {
+			if (minute==null) {
 				deg = second*Math.PI/30;
 			}
 		};
