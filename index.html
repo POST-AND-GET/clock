@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>clock</title>
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	#cvs{
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		margin: auto;
+		background: black;
+	}
+</style>
+</head>
+<body onload="startime()">
+    <canvas id="cvs" width="600" height="600"></canvas>
+</body>
+<script>
+	var ctx = document.getElementById('cvs').getContext('2d');
+	function clock(){
+		var now = new Date();
+		var hour = now.getHours(),
+			minute = now.getMinutes(),
+			second = now.getSeconds();
+		hour = hour>12?hour-12:hour;
+		ctx.save();
+		ctx.clearRect(0,0,600,600);
+		ctx.translate(300,300);
+		// ctx.scale(0.8,0.8);
+		ctx.rotate(-Math.PI/2);
+		ctx.strokeStyle = "#ffffff";
+		ctx.lineWidth = 2;
+		ctx.lineCap = "square";
+		ctx.save();
+		drawGra(12,210,0,220,0);
+		drawGra(60,217,0,220,0);
+		drawPoin(hour,minute,second,5,0,0,150,0,"#ff0000");//时针
+		drawPoin(0,minute,second,3,0,0,175,0,"#1ca112");//分针
+		drawPoin(0,0,second,1,0,0,190,0,"#ff6b08");//画秒针
+		ctx.lineWidth=2;
+		ctx.strokeStyle="#fc4e19";
+		ctx.fillStyle="#fc4e19";
+		ctx.beginPath();
+		ctx.arc(0,0,225,0,2*Math.PI,false);
+		ctx.stroke();    //这里restore()返回两次，因为要返回到第一个save()的状态，即初始化状态
+		ctx.restore();
+		ctx.restore();
+	}
+	function drawGra(n,goX,goY,toX,toY){
+		ctx.beginPath();
+		for(var i=0;i<n;i++) {
+			ctx.rotate(2*Math.PI/n);
+			ctx.moveTo(goX,goY);
+			ctx.lineTo(toX,toY);
+		}
+		ctx.stroke();
+		ctx.restore();
+		ctx.save();
+	}
+	function drawPoin(hour,minute,second,lw,goX,goY,toX,toY,color){
+		var deg = (Math.PI/6)*hour+(Math.PI/360)*minute+(Math.PI/21600)*second;
+		if (hour==0) {
+			deg = (Math.PI/30)*minute+(Math.PI/1800)*second;
+			if (minute==0) {
+				deg = second*Math.PI/30;
+			}
+		};
+		ctx.rotate(deg);
+		ctx.lineWidth=lw;
+		ctx.beginPath();
+		ctx.moveTo(goX,goY);
+		ctx.lineTo(toX,toY);
+		ctx.strokeStyle=color;
+		ctx.stroke();
+		ctx.restore();
+		ctx.save();  
+	}
+	function startime(){
+		setInterval(clock,1000);
+	}
+	
+</script>
+</html>
